@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinicapp
+  namespace: prod-petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinicapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: petclinicapp
+    spec:
+      containers:
+      - name: petclinicapp
+        image: anoophegde1995/springboot-petclinic_deploy:737434cdfda97f1d8777ee64636adb1b1462c284
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - name: log-dir
+            mountPath: /apps/logs/Springboot-PetClinic
+          - name: appconfig
+            mountPath: "/apps/configuration/Springboot-PetClinic"
+            #imagePullSecrets:
+            # - name: regcred
+      volumes:
+        - name: log-dir
+          persistentVolumeClaim:
+            claimName: petclinic-claim
+        - name: appconfig
+          configMap:
+            name: petclinic-configmap 
+
