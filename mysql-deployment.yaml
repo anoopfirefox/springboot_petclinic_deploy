@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: prod-petclinic 
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.7.8
+        name: mysql
+        env:
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "true"
+
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_PASSWORD
+          value: "petclinic"
+        - name: MYSQL_USER
+          value: "petclinic"
+        - name: MYSQL_DATABASE
+          value: "petclinic"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d
+        - name: execute-script
+          mountPath: /opt/poststart.sql
+          subPath: poststart.sql
+      volumes:
+      - name: mysql-persistent-storage
+        hostPath:
+          path: /var/lib/mysql
+          type: DirectoryOrCreate
+      - name: mysql-config
+        hostPath:
+          path: /etc/mysql/conf.d
+      - name: execute-script
+        configMap:
+          name: mysql-configmap
+          defaultMode: 0755 
+     
