@@ -36,5 +36,4 @@ spec:
             type: DirectoryOrCreate
         - name: appconfig
           configMap:
-            name: petclinic-configmap 
-
+            name: petclinic-configmap
