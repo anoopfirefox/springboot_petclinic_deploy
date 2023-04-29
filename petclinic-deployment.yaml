@@ -21,7 +21,7 @@ spec:
       containers:
       - name: petclinicapp
         image: anoophegde1995/springboot-petclinic_deploy:6b31ef0a5a0620668a5e17efe429cfbdd768e925
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -29,12 +29,11 @@ spec:
             mountPath: /apps/logs/Springboot-PetClinic
           - name: appconfig
             mountPath: "/apps/configuration/Springboot-PetClinic"
-            #imagePullSecrets:
-            # - name: regcred
       volumes:
         - name: log-dir
-          persistentVolumeClaim:
-            claimName: petclinic-claim
+          hostPath:
+            path: /apps/logs/Springboot-PetClinic
+            type: DirectoryOrCreate
         - name: appconfig
           configMap:
             name: petclinic-configmap 

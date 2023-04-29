@@ -5,7 +5,7 @@ metadata:
   #namespace: default
   namespace: prod-petclinic
 spec:
-  storageClassName: nfs-client
+  storageClassName: managed-nfs-storage 
   accessModes:
     - ReadWriteMany
   resources:
