@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: petclinicapp
-        image: anoophegde1995/springboot-petclinic_deploy:6b31ef0a5a0620668a5e17efe429cfbdd768e925
+        image: anoophegde1995/springboot-petclinic_deploy:f15909a9b3460d3ffee74794835938d474ad28cb
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
